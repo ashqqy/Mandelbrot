@@ -15,7 +15,7 @@ FLAGS = -D _DEBUG -ggdb3 -std=c++17 -O0 -Wall -Wextra -Weffc++ -Waggressive-loop
 all: built run
 
 built:
-	g++ main.cpp -lsfml-graphics -lsfml-window -lsfml-system -o main $(FLAGS)
+	g++ main.cpp -o main `pkg-config --cflags --libs sdl3` $(FLAGS)
 
 run:
 	./main
