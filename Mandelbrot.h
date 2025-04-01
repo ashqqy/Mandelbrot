@@ -6,6 +6,9 @@
 static const int START_WINDOW_WIDTH  = 2560;
 static const int START_WINDOW_HEIGHT = 1440;
 
+const int TITLE_SIZE = 10;
+const int MS_IN_SECOND = 1000;
+
 typedef struct
 {
     SDL_Window* window;
@@ -18,11 +21,23 @@ typedef struct
     double zoom;
 } window_params_t;
 
+typedef struct
+{
+    uint64_t current_time;
+    uint64_t last_time;
+    float frame_count;
+    char title[TITLE_SIZE];
+} FPS_params_t;
+
+
 void WindowParamsInit (SDL_Window* window, window_params_t* window_params);
+void FPSParamsInit (FPS_params_t* FPS_params);
 
 void HandleKeyboardEvent (window_params_t* window_params);
 int HandleEvents (window_params_t* window_params);
 
 void DrawMandelbrot (window_params_t* window_params);
+
+void UpdateFPS (SDL_Window* window, FPS_params_t* FPS_params);
 
 #endif // MANDELBROT_H

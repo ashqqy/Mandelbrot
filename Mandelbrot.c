@@ -1,9 +1,14 @@
+#include <assert.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 #include "Mandelbrot.h"
 
 void WindowParamsInit (SDL_Window* window, window_params_t* window_params)
 {
+    assert (window != NULL);
+    assert (window_params != NULL);
+
     window_params->window  = window;
     window_params->surface = SDL_GetWindowSurface (window);
     window_params->width   = START_WINDOW_WIDTH;
@@ -13,8 +18,20 @@ void WindowParamsInit (SDL_Window* window, window_params_t* window_params)
     window_params->zoom    = 1.0;
 }
 
+void FPSParamsInit (FPS_params_t* FPS_params)
+{
+    assert (FPS_params != NULL);
+
+    FPS_params->current_time = 0;
+    FPS_params->last_time    = SDL_GetTicks ();
+    FPS_params->frame_count  = 0.0;
+    snprintf (FPS_params->title, TITLE_SIZE, "FPS: %.1f", FPS_params->frame_count);
+}
+
 void HandleKeyboardEvent (window_params_t* window_params)
 {
+    assert (window_params != NULL);
+
     switch (window_params->event.key.scancode)
     {
         case SDL_SCANCODE_H:
@@ -56,6 +73,8 @@ void HandleKeyboardEvent (window_params_t* window_params)
 
 int HandleEvents (window_params_t* window_params)
 {
+    assert (window_params != NULL);
+
     while (SDL_PollEvent (&window_params->event) != 0) 
     {
         switch (window_params->event.type)
@@ -91,6 +110,8 @@ int HandleEvents (window_params_t* window_params)
 
 void DrawMandelbrot (window_params_t* window_params)
 {
+    assert (window_params != NULL);
+
     uint32_t* pixels = (uint32_t*) calloc ((size_t) (window_params->width * window_params->height), sizeof (uint32_t));
 
     // Nested *pixel* loops
@@ -145,4 +166,24 @@ void DrawMandelbrot (window_params_t* window_params)
     SDL_UpdateWindowSurface(window_params->window);
 
     free (pixels); pixels = NULL;
+}
+
+void UpdateFPS (SDL_Window* window, FPS_params_t* FPS_params)
+{
+    assert (window != NULL);
+    assert (FPS_params != NULL);
+
+    FPS_params->frame_count += 1;
+    FPS_params->current_time = SDL_GetTicks ();
+    
+    if (FPS_params->current_time - FPS_params->last_time >= MS_IN_SECOND)
+    {
+        float FPS = (FPS_params->frame_count * MS_IN_SECOND) / (float) (FPS_params->current_time - FPS_params->last_time);
+        snprintf (FPS_params->title, TITLE_SIZE, "FPS: %.1f", FPS);
+
+        FPS_params->last_time = FPS_params->current_time;
+        FPS_params->frame_count = 0;
+
+        SDL_SetWindowTitle (window, FPS_params->title);
+    }
 }

@@ -1,5 +1,7 @@
 #include <Mandelbrot.h>
 
+#define NO_DEBUG
+
 int main () 
 {
     SDL_Init(SDL_INIT_VIDEO);
@@ -10,12 +12,16 @@ int main ()
     window_params_t window_params = {};
     WindowParamsInit (window, &window_params);
 
+    FPS_params_t FPS_params = {};
+    FPSParamsInit (&FPS_params);
+
     int quit = 0;
 
     while (!quit) 
     {
         quit = HandleEvents (&window_params);
         DrawMandelbrot (&window_params);
+        UpdateFPS (window_params.window, &FPS_params);
     }
 
     SDL_DestroyWindow(window);
