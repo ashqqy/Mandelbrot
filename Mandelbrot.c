@@ -1,4 +1,5 @@
 #include <assert.h>
+#include <math.h>
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -36,25 +37,25 @@ void HandleKeyboardEvent (window_params_t* window_params)
     {
         case SDL_SCANCODE_H:
         {
-            window_params->x_shift -= 0.2;
+            window_params->x_shift -= 0.2 / window_params->zoom;
             break;
         }
 
         case SDL_SCANCODE_J:
         {
-            window_params->y_shift += 0.2;
+            window_params->y_shift += 0.2 / window_params->zoom;
             break;
         }
 
         case SDL_SCANCODE_K:
         {
-            window_params->y_shift -= 0.2;
+            window_params->y_shift -= 0.2 / window_params->zoom;
             break;
         }
 
         case SDL_SCANCODE_L:
         {
-            window_params->x_shift += 0.2;
+            window_params->x_shift += 0.2 / window_params->zoom;
             break;
         }
 
@@ -122,11 +123,11 @@ void DrawMandelbrot (window_params_t* window_params)
             double aspect_ratio = (double) window_params->width / window_params->height;
 
             // Transform screen coords to Mandelbrot set coords
-            double y_0 = ((y_pixel - window_params->height / 2.0) * 
-                (4.0 / window_params->height) + window_params->y_shift) / window_params->zoom;               // y \in (-2, 2)
+            double y_0 = (y_pixel - window_params->height / 2.0) * (4.0 / window_params->height)               // y \in (-2, 2)
+                        / window_params->zoom + window_params->y_shift;
                 
-            double x_0 = ((x_pixel - window_params->width  / 2.0) * 
-                (4.0 * aspect_ratio / window_params->width) + window_params->x_shift) / window_params->zoom; // x \in (-4, 3)
+            double x_0 = (x_pixel - window_params->width  / 2.0) * (4.0 * aspect_ratio / window_params->width) // x \in (-4, 3)
+                        / window_params->zoom + window_params->x_shift;
 
             double x_Re = 0;   // current Re(z)
             double y_Im = 0;   // current Im(z)
@@ -149,13 +150,7 @@ void DrawMandelbrot (window_params_t* window_params)
                 iterations++;
             }
 
-            uint32_t color;
-            if (iterations == 256)
-                color = 0xFFFFFFFF;
-            else 
-                color = 0;
-
-            pixels[y_pixel * window_params->width + x_pixel] = color;
+            pixels[y_pixel * window_params->width + x_pixel] = GetColor ((uint32_t) iterations);
         }
     }
 
@@ -166,6 +161,15 @@ void DrawMandelbrot (window_params_t* window_params)
     SDL_UpdateWindowSurface(window_params->window);
 
     free (pixels); pixels = NULL;
+}
+
+uint32_t GetColor (uint32_t iterations)
+{
+    uint32_t red   = ((iterations * iterations - 1) % 256);
+    uint32_t green = (red + iterations) % 256;
+    uint32_t blue  = (red + green + iterations) % 256;
+
+    return (ALPHA << 24) | (red << 16) | (green << 8) | (blue);
 }
 
 void UpdateFPS (SDL_Window* window, FPS_params_t* FPS_params)

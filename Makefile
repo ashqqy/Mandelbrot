@@ -15,7 +15,7 @@
 all: built run
 
 built:
-	g++ -I./ main.c Mandelbrot.c -o main `pkg-config --cflags --libs sdl3` $(FLAGS)
+	g++ -O3 -I./ main.c Mandelbrot.c -o main `pkg-config --cflags --libs sdl3` $(FLAGS)
 
 run:
 	./main

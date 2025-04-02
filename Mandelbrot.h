@@ -9,6 +9,8 @@ static const int START_WINDOW_HEIGHT = 1440;
 const int TITLE_SIZE = 10;
 const int MS_IN_SECOND = 1000;
 
+const uint32_t ALPHA = 255;
+
 typedef struct
 {
     SDL_Window* window;
@@ -37,6 +39,7 @@ void HandleKeyboardEvent (window_params_t* window_params);
 int HandleEvents (window_params_t* window_params);
 
 void DrawMandelbrot (window_params_t* window_params);
+uint32_t GetColor (uint32_t iterations);
 
 void UpdateFPS (SDL_Window* window, FPS_params_t* FPS_params);
 
