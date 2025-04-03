@@ -15,9 +15,7 @@ void WindowParamsInit (SDL_Window* window, window_params_t* window_params)
     window_params->surface = SDL_GetWindowSurface (window);
     window_params->width   = START_WINDOW_WIDTH;
     window_params->height  = START_WINDOW_HEIGHT;
-    window_params->x_shift = -0.5;
-    window_params->y_shift = 0.0;
-    window_params->zoom    = 1.0;
+    window_params->aspect_ratio = (double) window_params->width / window_params->height;
 }
 
 void FpsParamsInit (fps_params_t* fps_params)
@@ -55,7 +53,7 @@ int EventsHandle (window_params_t* window_params, image_data_t* image_data)
 
             case SDL_EVENT_KEY_DOWN:
             {
-                KeyboardEventHandle (window_params, event);
+                KeyboardEventHandle (image_data, event);
                 break;
             }
 
@@ -87,47 +85,51 @@ void WindowResizeEventHandle (window_params_t* window_params, image_data_t* imag
         printf ("Pixels array realloc error\n");
         EXIT_FAILURE;
     }
+
+    window_params->aspect_ratio = (double) window_params->width / window_params->height;
+    image_data->height_half = window_params->height / 2.0;
+    image_data->width_half  = window_params->width  / 2.0;
 }
 
-void KeyboardEventHandle (window_params_t* window_params, SDL_Event event)
+void KeyboardEventHandle (image_data_t* image_data, SDL_Event event)
 {
-    assert (window_params != NULL);
+    assert (image_data != NULL);
 
     switch (event.key.scancode)
     {
         case SDL_SCANCODE_H:
         {
-            window_params->x_shift -= 0.2 / window_params->zoom;
+            image_data->x_shift -= 0.2 / image_data->zoom;
             break;
         }
 
         case SDL_SCANCODE_J:
         {
-            window_params->y_shift += 0.2 / window_params->zoom;
+            image_data->y_shift += 0.2 / image_data->zoom;
             break;
         }
 
         case SDL_SCANCODE_K:
         {
-            window_params->y_shift -= 0.2 / window_params->zoom;
+            image_data->y_shift -= 0.2 / image_data->zoom;
             break;
         }
 
         case SDL_SCANCODE_L:
         {
-            window_params->x_shift += 0.2 / window_params->zoom;
+            image_data->x_shift += 0.2 / image_data->zoom;
             break;
         }
 
         case SDL_SCANCODE_Z:
         {
-            window_params->zoom *= 1.1;
+            image_data->zoom *= 1.1;
             break;
         }
 
         case SDL_SCANCODE_X:
         {
-            window_params->zoom /= 1.1;
+            image_data->zoom /= 1.1;
             break;
         }
 
