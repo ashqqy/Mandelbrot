@@ -5,7 +5,10 @@
 
 //--------------------------------------------------------------------
 
-#include <SDL3/SDL.h>
+#include <SDL3/SDL_events.h>
+#include <SDL3/SDL_scancode.h>
+#include <SDL3/SDL_timer.h>
+#include <SDL3/SDL_video.h>
 
 //--------------------------------------------------------------------
 
@@ -31,6 +34,7 @@ typedef struct
 {
     uint32_t* pixels;
     uint32_t* colors;
+    int pixels_array_size;
     double width_half;
     double height_half;
     double x_shift;

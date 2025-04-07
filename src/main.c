@@ -1,15 +1,19 @@
 #include <SDL3/SDL_init.h>
 #include <SDL3/SDL_video.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 #include "render.h"
 #include "ui.h"
 
-#define NO_DEBUG
-
 //--------------------------------------------------------------------
 
-int main () 
+int main (const int argc, const char* argv[]) 
 {
+    SetCalculateFunction SetCalculate = SetCalculateFunctionChoose (argc, argv);
+    if (SetCalculate == NULL)
+        return 1;
+
     SDL_Init(SDL_INIT_VIDEO);
 
     SDL_Window* window = SDL_CreateWindow ("Mandelbrot", START_WINDOW_WIDTH, START_WINDOW_HEIGHT, SDL_WINDOW_RESIZABLE);
