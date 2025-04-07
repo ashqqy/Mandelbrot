@@ -1,8 +1,14 @@
+#include <SDL3/SDL_surface.h>
+#include <SDL3/SDL_video.h>
+
 #include <assert.h>
-#include <stdlib.h>
+#include <stdint.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 #include "render.h"
+#include "ui.h"
 
 //--------------------------------------------------------------------
 

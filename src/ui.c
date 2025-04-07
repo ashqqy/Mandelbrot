@@ -1,6 +1,12 @@
+#include <SDL3/SDL_events.h>
+#include <SDL3/SDL_scancode.h>
+#include <SDL3/SDL_timer.h>
+#include <SDL3/SDL_video.h>
+
 #include <assert.h>
-#include <stdlib.h>
+#include <stdint.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "ui.h"
 
