@@ -92,6 +92,7 @@ void WindowResizeEventHandle (window_params_t* window_params, image_data_t* imag
         EXIT_FAILURE;
     }
 
+    image_data->pixels_array_size = window_params->width * window_params->height + 3;
     window_params->aspect_ratio = (double) window_params->width / window_params->height;
     image_data->height_half = window_params->height / 2.0;
     image_data->width_half  = window_params->width  / 2.0;
