@@ -14,7 +14,7 @@ int main (const int argc, const char* argv[])
     if (SetCalculate == NULL)
         return 1;
 
-    SDL_Init(SDL_INIT_VIDEO);
+    SDL_Init (SDL_INIT_VIDEO);
 
     SDL_Window* window = SDL_CreateWindow ("Mandelbrot", START_WINDOW_WIDTH, START_WINDOW_HEIGHT, SDL_WINDOW_RESIZABLE);
     SDL_SetWindowPosition (window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
@@ -28,7 +28,7 @@ int main (const int argc, const char* argv[])
     image_data_t image_data = {};
     ImageDataInit (&window_params, &image_data);
 
-    int quit = 0;
+    bool quit = 0;
 
     while (!quit) 
     {

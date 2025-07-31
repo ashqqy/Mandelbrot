@@ -1,5 +1,3 @@
-// WARNING! File name has a left cyclic shift!
-
 #ifndef UI_H
 #define UI_H
 
@@ -55,7 +53,7 @@ typedef struct
 void WindowParamsInit (SDL_Window* window, window_params_t* window_params);
 void FpsParamsInit (fps_params_t* fps_params);
 
-int EventsHandle (window_params_t* window_params, image_data_t* image_data);
+bool EventsHandle (window_params_t* window_params, image_data_t* image_data);
 void KeyboardEventHandle (image_data_t* image_data, SDL_Event event);
 void WindowResizeEventHandle (window_params_t* window_params, image_data_t* image_data);
 

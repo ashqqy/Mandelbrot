@@ -1,7 +1,7 @@
 # DEBUG MODE                                        | # RELEASE MODE
 # make clean                                        | # make clean
 # make CXXFLAGS=-DDEBUG                             | # make CXXFLAGS=-O3
-# ./build/mandelbrot.x [slow|parallel|intrinsics]   | # ./build/mandelbrot.x [slow|parallel|intrinsics]
+# ./build/mandelbrot.x [slow|unrolling|intrinsics]   | # ./build/mandelbrot.x [slow|unrolling|intrinsics]
 
 CXX_DEBUG_FLAGS ?= -D_DEBUG -ggdb3 -std=c++17 -O0 -Wall -Wextra -Weffc++ -Waggressive-loop-optimizations           \
                    -Wc++14-compat -Wmissing-declarations -Wdeprecated -Wcast-align -Wcast-qual -Wchar-subscripts   \
@@ -55,7 +55,7 @@ $(COBJ): $(O_DIR)/%.o: %.c
 
 .PHONY: run
 run:
-	$(O_DIR)/mandelbrot.x parallel
+	$(O_DIR)/mandelbrot.x unrolling
 
 #--------------------------------------------------------------------
 
