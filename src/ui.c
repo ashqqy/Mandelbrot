@@ -4,6 +4,7 @@
 #include <SDL3/SDL_video.h>
 
 #include <assert.h>
+#include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -36,7 +37,7 @@ void FpsParamsInit (fps_params_t* fps_params)
 
 //--------------------------------------------------------------------
 
-int EventsHandle (window_params_t* window_params, image_data_t* image_data)
+bool EventsHandle (window_params_t* window_params, image_data_t* image_data)
 {
     assert (window_params != NULL);
 
@@ -48,7 +49,7 @@ int EventsHandle (window_params_t* window_params, image_data_t* image_data)
         {
             case SDL_EVENT_QUIT:
             {
-                return 1;
+                return true;
             }
 
             case SDL_EVENT_WINDOW_RESIZED:
@@ -70,7 +71,7 @@ int EventsHandle (window_params_t* window_params, image_data_t* image_data)
         }
     }
 
-    return 0;
+    return false;
 }
 
 void WindowResizeEventHandle (window_params_t* window_params, image_data_t* image_data)
@@ -89,7 +90,7 @@ void WindowResizeEventHandle (window_params_t* window_params, image_data_t* imag
     if (image_data->pixels == NULL)
     {
         printf ("Pixels array realloc error\n");
-        EXIT_FAILURE;
+        exit (EXIT_FAILURE);
     }
 
     image_data->pixels_array_size = window_params->width * window_params->height + 3;
@@ -104,24 +105,32 @@ void KeyboardEventHandle (image_data_t* image_data, SDL_Event event)
 
     switch (event.key.scancode)
     {
+        case SDL_SCANCODE_LEFT:
+        case SDL_SCANCODE_A:
         case SDL_SCANCODE_H:
         {
             image_data->x_shift -= 0.2 / image_data->zoom;
             break;
         }
 
+        case SDL_SCANCODE_DOWN:
+        case SDL_SCANCODE_S:
         case SDL_SCANCODE_J:
         {
             image_data->y_shift += 0.2 / image_data->zoom;
             break;
         }
 
+        case SDL_SCANCODE_UP:
+        case SDL_SCANCODE_W:
         case SDL_SCANCODE_K:
         {
             image_data->y_shift -= 0.2 / image_data->zoom;
             break;
         }
 
+        case SDL_SCANCODE_RIGHT:
+        case SDL_SCANCODE_D:
         case SDL_SCANCODE_L:
         {
             image_data->x_shift += 0.2 / image_data->zoom;

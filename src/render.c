@@ -55,9 +55,7 @@ void SetCalculateSlow (window_params_t* window_params, image_data_t* image_data)
     }
 }
 
-int isSet = 0;
-
-void SetCalculateParallel (window_params_t* window_params, image_data_t* image_data)
+void SetCalculateUnrolling (window_params_t* window_params, image_data_t* image_data)
 {
     assert (window_params != NULL);
     assert (image_data    != NULL);
@@ -132,15 +130,16 @@ SetCalculateFunction SetCalculateFunctionChoose (const int argc, const char* arg
     if (argc != 2)
     {
         // if the mode is not specified, then use intrinsics by default
+        printf ("You have not selected any mode. The default mode is intinsics (fast)\n");
         return SetCalculateIntrinsics;
     }
     else if (strcmp (argv[1], "slow") == 0)
     {
         return SetCalculateSlow;
     }
-    else if (strcmp (argv[1], "parallel") == 0)
+    else if (strcmp (argv[1], "unrolling") == 0)
     {
-        return SetCalculateParallel;
+        return SetCalculateUnrolling;
     }
     else if (strcmp (argv[1], "intrinsics") == 0)
     {
@@ -148,7 +147,7 @@ SetCalculateFunction SetCalculateFunctionChoose (const int argc, const char* arg
     }
     else
     {
-        printf ("You chose the wrong mode.\nPlease specify the mode of calculating the set:\n 1) slow\n 2) parallel\n 3) intrinsics\n");
+        printf ("You chose the wrong mode.\nPlease specify the mode of calculating the set:\n 1) slow\n 2) unrolling\n 3) intrinsics\n");
         return NULL;
     }
 }
@@ -160,7 +159,7 @@ void ImageDataInit (window_params_t* window_params, image_data_t* image_data)
     assert (window_params != NULL);
     assert (image_data    != NULL);
 
-    image_data->pixels_array_size = window_params->width * window_params->height + 3;
+    image_data->pixels_array_size = window_params->width * window_params->height + 3; // add comment and constant
 
     image_data->height_half = window_params->height / 2.0;
     image_data->width_half  = window_params->width  / 2.0;
@@ -173,14 +172,14 @@ void ImageDataInit (window_params_t* window_params, image_data_t* image_data)
     if (image_data->pixels == NULL)
     {
         printf ("Pixels array init error\n");
-        EXIT_FAILURE;
+        exit (EXIT_FAILURE);
     }
 
     image_data->colors = (uint32_t*) calloc (MAX_ITER + 1, sizeof (uint32_t));
     if (image_data->colors == NULL)
     {
         printf ("Colors array init error\n");
-        EXIT_FAILURE;
+        exit (EXIT_FAILURE);
     }
 
     // Generate array of colors
